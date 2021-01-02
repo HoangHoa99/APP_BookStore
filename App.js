@@ -45,7 +45,7 @@ export default function App() {
 
   getCartData();
 
-  const signIn = () => {
+  const userSignIn = () => {
     setIsLogin(true);
   };
 
@@ -61,7 +61,7 @@ export default function App() {
   const loginSetting = {
     isLogin: isLogin,
     setIsLogin,
-    signIn,
+    userSignIn,
     signOut,
     isAddToCart: isAddToCart,
     addItemToCart,
