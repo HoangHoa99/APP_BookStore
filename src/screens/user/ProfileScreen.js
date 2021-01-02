@@ -32,11 +32,19 @@ export default function ProfileScreen({ navigation }) {
     _getUserProfile();
   }, []);
 
+  function getAvt() {
+    return profile.avatar !== null ? (
+      <Avatar.Image source={{ uri: profile.avatar }} size={80} />
+    ) : (
+      <Avatar.Image source={require("../../assets/avt.png")} size={80} />
+    );
+  }
+
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.userInfoSection}>
         <View style={{ flexDirection: "row", marginTop: 15 }}>
-          <Avatar.Image source={require("../../assets/avt.png")} size={80} />
+          {getAvt()}
           <View style={{ marginLeft: 20 }}>
             <Title
               style={[

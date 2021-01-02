@@ -7,6 +7,7 @@ import {
   Image,
   TouchableOpacity,
 } from "react-native";
+import DropDownPicker from "react-native-dropdown-picker";
 //API
 import { GetBookAsync, BooksByCateAsync } from "../../services/BookService";
 // import Carousel from "react-native-snap-carousel";
@@ -17,62 +18,12 @@ import { ScrollView } from "react-native-gesture-handler";
 // CONSTANTS
 
 export default function BookListScreen({ navigation }) {
-  const [vanHoc, setVanHoc] = React.useState([]);
-  const [tamLy, setTamLy] = React.useState([]);
-  const [tieuSu, setTieuSu] = React.useState([]);
-  const [ngoaiNgu, setNgoaiNgu] = React.useState([]);
-  const [kinhTe, setKinhTe] = React.useState([]);
-  const [thieuNhi, setThieuNhi] = React.useState([]);
-  const [hotBooks, setHotBooks] = React.useState([]);
+  const [isLoading, setIsLoading] = React.useState(true);
+  const [title, setTitle] = React.useState("Tiểu sử-hồi ký");
+  const [valueId, setValueId] = React.useState("5f789d427c17be338c676ef8");
+  const [books, setBooks] = React.useState([]);
+  //
   const [newBooks, setNewBooks] = React.useState([]);
-
-  const cateLists = [
-    {
-      _id: "5f789d047c17be338c676ef5",
-      name: "Văn học",
-      __v: 0,
-    },
-    {
-      _id: "5f789d147c17be338c676ef6",
-      name: "Sách thiếu nhi",
-      __v: 0,
-    },
-    {
-      _id: "5f789d1d7c17be338c676ef7",
-      name: "Kinh tế",
-      __v: 0,
-    },
-    {
-      _id: "5f789d427c17be338c676ef8",
-      name: "Tiểu sử-hồi ký",
-      __v: 0,
-    },
-    {
-      _id: "5f789d757c17be338c676ef9",
-      name: "Tâm lý",
-      __v: 0,
-    },
-    {
-      _id: "5f789d7d7c17be338c676efa",
-      name: "Ngoại ngữ",
-      __v: 0,
-    },
-  ];
-
-  // const carouselItems = [
-  //   {
-  //     title: "Slide 1",
-  //     images: "../../assets/slide1.png",
-  //   },
-  //   {
-  //     title: "Slide 2",
-  //     images: "../../assets/slide2.png",
-  //   },
-  //   {
-  //     title: "Slide 3",
-  //     images: "../../assets/3.png",
-  //   },
-  // ];
 
   React.useEffect(() => {
     const getBookLists = async () => {
@@ -81,86 +32,19 @@ export default function BookListScreen({ navigation }) {
       });
     };
 
-    const getTieuSu = async () => {
-      BooksByCateAsync(cateLists[3]._id).then((res) => {
-        setTieuSu(res.data);
-      });
-    };
-
-    const getTamLy = async () => {
-      BooksByCateAsync(cateLists[4]._id).then((res) => {
-        setTamLy(res.data);
-      });
-    };
-
-    const getNgoaiNgu = async () => {
-      BooksByCateAsync(cateLists[5]._id).then((res) => {
-        setNgoaiNgu(res.data);
-      });
-    };
-
-    const getVanHoc = async () => {
-      BooksByCateAsync(cateLists[0]._id).then((res) => {
-        setVanHoc(res.data);
-      });
-    };
-
-    const getThieuNhi = async () => {
-      BooksByCateAsync(cateLists[1]._id).then((res) => {
-        setThieuNhi(res.data);
-      });
-    };
-
-    const getKinhTe = async () => {
-      BooksByCateAsync(cateLists[2]._id).then((res) => {
-        setKinhTe(res.data);
-      });
-    };
-
     getBookLists();
-    getTamLy();
-    getTieuSu();
-    getNgoaiNgu();
-    getVanHoc();
-    getThieuNhi();
-    getKinhTe();
   }, []);
 
-  // function _renderItem({ item, index }) {
-  //   return (
-  //     // <View
-  //     //   style={{
-  //     //     backgroundColor: "floralwhite",
-  //     //     borderRadius: 5,
-  //     //   }}
-  //     // >
-  //     //   <Text style={{ fontSize: 30 }}>{item.title}</Text>
-  //     //   <Text>{item.images}</Text>
-  //     // </View>
-  //     //<a href='https://www.freepik.com/vectors/school'>School vector created by pch.vector - www.freepik.com</a>
-  //     <Image
-  //       source={{
-  //         uri:
-  //           "https://cdn.pixabay.com/photo/2017/09/26/19/56/discount-2789863_1280.png",
-  //       }}
-  //       width={200}
-  //       height={150}
-  //     />
-  //   );
-  // }
+  const _getBook = async () => {
+    await BooksByCateAsync(valueId).then((res) => {
+      res.data !== null ? setBooks(res.data) : setBooks([]);
+    });
+  };
+
+  _getBook();
 
   return (
     <>
-      {/* <Carousel
-        layout={"default"}
-        // ref={(ref) => (this.carousel = ref)}
-        data={carouselItems}
-        sliderWidth={windowWidth}
-        itemWidth={windowWidth - 20}
-        renderItem={_renderItem}
-        // onSnapToItem={(index) => this.setState({ activeIndex: index })}
-      /> */}
-      {/* banner */}
       <ScrollView
         style={{ flexDirection: "column" }}
         showsVerticalScrollIndicator={false}
@@ -216,25 +100,57 @@ export default function BookListScreen({ navigation }) {
             marginTop: 10,
           }}
         >
-          <Text
-            style={{
-              fontFamily: "Bold",
-              fontWeight: "bold",
-              fontSize: 18,
-              color: "#4f4a4a",
-            }}
-          >
-            {cateLists[3].name}
-          </Text>
-          <View
-            style={{
-              width: 5,
-              height: 5,
-              borderRadius: 5,
-              marginHorizontal: 5,
-              backgroundColor: "#000",
-            }}
-          ></View>
+          <View style={{ width: "30%", flexDirection: "row" }}>
+            <Text
+              style={{
+                fontFamily: "Bold",
+                fontWeight: "bold",
+                fontSize: 18,
+                color: "#4f4a4a",
+              }}
+            >
+              {title}
+            </Text>
+          </View>
+          <View style={{ width: "20%" }}>
+            <DropDownPicker
+              items={[
+                {
+                  value: "5f789d047c17be338c676ef5",
+                  label: "Văn học",
+                },
+                {
+                  value: "5f789d147c17be338c676ef6",
+                  label: "Sách thiếu nhi",
+                },
+                {
+                  value: "5f789d1d7c17be338c676ef7",
+                  label: "Kinh tế",
+                },
+                {
+                  value: "5f789d427c17be338c676ef8",
+                  label: "Tiểu sử-hồi ký",
+                },
+                {
+                  value: "5f789d757c17be338c676ef9",
+                  label: "Tâm lý",
+                },
+                // {
+                //   value: "5f789d7d7c17be338c676efa",
+                //   label: "Ngoại ngữ",
+                // },
+              ]}
+              defaultValue={valueId}
+              containerStyle={{ marginLeft: 100, height: 30, width: 120 }}
+              style={{ backgroundColor: "#fafafa" }}
+              itemStyle={{ justifyContent: "flex-start" }}
+              dropDownStyle={{ backgroundColor: "#fafafa" }}
+              onChangeItem={(item) => {
+                setValueId(item.value);
+                setTitle(item.label);
+              }}
+            />
+          </View>
         </View>
         <FlatList
           showsHorizontalScrollIndicator={false}
@@ -242,212 +158,7 @@ export default function BookListScreen({ navigation }) {
           contentContainerStyle={styles.listContainer}
           horizontal={true}
           numColumns={1}
-          data={tieuSu}
-          renderItem={({ item }) => (
-            <Book item={item} navigation={navigation} />
-          )}
-        />
-        {/* tam ly */}
-        <View
-          style={{
-            flexDirection: "row",
-            width: "100%",
-            alignItems: "center",
-            marginLeft: 15,
-            marginTop: 10,
-          }}
-        >
-          <Text
-            style={{
-              fontFamily: "Bold",
-              fontWeight: "bold",
-              fontSize: 18,
-              color: "#4f4a4a",
-            }}
-          >
-            {cateLists[4].name}
-          </Text>
-          <View
-            style={{
-              width: 5,
-              height: 5,
-              borderRadius: 5,
-              marginHorizontal: 5,
-              backgroundColor: "#000",
-            }}
-          ></View>
-        </View>
-        <FlatList
-          showsHorizontalScrollIndicator={false}
-          tyle={styles.list}
-          contentContainerStyle={styles.listContainer}
-          horizontal={true}
-          numColumns={1}
-          data={tamLy}
-          renderItem={({ item }) => (
-            <Book item={item} navigation={navigation} />
-          )}
-        />
-        {/* van hoc */}
-        <View
-          style={{
-            flexDirection: "row",
-            width: "100%",
-            alignItems: "center",
-            marginLeft: 15,
-            marginTop: 10,
-          }}
-        >
-          <Text
-            style={{
-              fontFamily: "Bold",
-              fontWeight: "bold",
-              fontSize: 18,
-              color: "#4f4a4a",
-            }}
-          >
-            {cateLists[0].name}
-          </Text>
-          <View
-            style={{
-              width: 5,
-              height: 5,
-              borderRadius: 5,
-              marginHorizontal: 5,
-              backgroundColor: "#000",
-            }}
-          ></View>
-        </View>
-        <FlatList
-          showsHorizontalScrollIndicator={false}
-          tyle={styles.list}
-          contentContainerStyle={styles.listContainer}
-          horizontal={true}
-          numColumns={1}
-          data={vanHoc}
-          renderItem={({ item }) => (
-            <Book item={item} navigation={navigation} />
-          )}
-        />
-        {/* thieu nhi */}
-        <View
-          style={{
-            flexDirection: "row",
-            width: "100%",
-            alignItems: "center",
-            marginLeft: 15,
-            marginTop: 10,
-          }}
-        >
-          <Text
-            style={{
-              fontFamily: "Bold",
-              fontWeight: "bold",
-              fontSize: 18,
-              color: "#4f4a4a",
-            }}
-          >
-            {cateLists[1].name}
-          </Text>
-          <View
-            style={{
-              width: 5,
-              height: 5,
-              borderRadius: 5,
-              marginHorizontal: 5,
-              backgroundColor: "#000",
-            }}
-          ></View>
-        </View>
-        <FlatList
-          showsHorizontalScrollIndicator={false}
-          tyle={styles.list}
-          contentContainerStyle={styles.listContainer}
-          horizontal={true}
-          numColumns={1}
-          data={thieuNhi}
-          renderItem={({ item }) => (
-            <Book item={item} navigation={navigation} />
-          )}
-        />
-        {/* kinh te */}
-        <View
-          style={{
-            flexDirection: "row",
-            width: "100%",
-            alignItems: "center",
-            marginLeft: 15,
-            marginTop: 10,
-          }}
-        >
-          <Text
-            style={{
-              fontFamily: "Bold",
-              fontWeight: "bold",
-              fontSize: 18,
-              color: "#4f4a4a",
-            }}
-          >
-            {cateLists[2].name}
-          </Text>
-          <View
-            style={{
-              width: 5,
-              height: 5,
-              borderRadius: 5,
-              marginHorizontal: 5,
-              backgroundColor: "#000",
-            }}
-          ></View>
-        </View>
-        <FlatList
-          showsHorizontalScrollIndicator={false}
-          tyle={styles.list}
-          contentContainerStyle={styles.listContainer}
-          horizontal={true}
-          numColumns={1}
-          data={kinhTe}
-          renderItem={({ item }) => (
-            <Book item={item} navigation={navigation} />
-          )}
-        />
-        {/* ngoai ngu */}
-        <View
-          style={{
-            flexDirection: "row",
-            width: "100%",
-            alignItems: "center",
-            marginLeft: 15,
-            marginTop: 10,
-          }}
-        >
-          <Text
-            style={{
-              fontFamily: "Bold",
-              fontWeight: "bold",
-              fontSize: 18,
-              color: "#4f4a4a",
-            }}
-          >
-            {cateLists[5].name}
-          </Text>
-          <View
-            style={{
-              width: 5,
-              height: 5,
-              borderRadius: 5,
-              marginHorizontal: 5,
-              backgroundColor: "#000",
-            }}
-          ></View>
-        </View>
-        <FlatList
-          showsHorizontalScrollIndicator={false}
-          tyle={styles.list}
-          contentContainerStyle={styles.listContainer}
-          horizontal={true}
-          numColumns={1}
-          data={ngoaiNgu}
+          data={books}
           renderItem={({ item }) => (
             <Book item={item} navigation={navigation} />
           )}
@@ -456,55 +167,6 @@ export default function BookListScreen({ navigation }) {
     </>
   );
 }
-
-// function Book({ item, navigation }) {
-//   return (
-//     <>
-//       <TouchableOpacity
-//         style={styles.card}
-//         onPress={() => {
-//           navigation.navigate("BookDetailScreen", {
-//             book: item,
-//           });
-//         }}
-//       >
-//         <Image
-//           style={styles.bookImage}
-//           source={{
-//             uri: item.images,
-//           }}
-//         />
-//         <View style={styles.cardFooter}>
-//           <View>
-//             <Text
-//               style={{
-//                 fontWeight: "500",
-//                 fontSize: 18,
-//                 width: 130,
-//                 height: 40,
-//               }}
-//             >
-//               {item.title}
-//             </Text>
-//             <Text
-//               style={{
-//                 fontStyle: "italic",
-//                 marginTop: 0,
-//                 width: 130,
-//                 height: 30,
-//               }}
-//             >
-//               {item.author}
-//             </Text>
-//             <Text style={{ fontWeight: "bold", fontSize: 15, marginTop: 2 }}>
-//               {item.price} $
-//             </Text>
-//           </View>
-//         </View>
-//       </TouchableOpacity>
-//     </>
-//   );
-// }
 
 function Book({ item, navigation }) {
   return (

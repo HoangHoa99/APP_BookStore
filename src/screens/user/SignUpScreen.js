@@ -14,11 +14,12 @@ import {
   Alert,
   Button,
 } from "react-native";
-import { add } from "react-native-reanimated";
 import Feather from "react-native-vector-icons/Feather";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
+import Loading from "../load/Loading";
 
 export default function SignUpScreen({ navigation }) {
+  const [isLoading, setIsLoading] = React.useState(false);
   const [formValidate, setFormValidate] = React.useState(false);
   const [email, setEmail] = React.useState("");
   const [username, setUsername] = React.useState("");
@@ -57,6 +58,7 @@ export default function SignUpScreen({ navigation }) {
   });
 
   function signUp() {
+    setIsLoading(true);
     fetch("https://utebookstore.herokuapp.com/user/create", {
       method: "POST",
       headers: {
@@ -77,10 +79,25 @@ export default function SignUpScreen({ navigation }) {
     })
       .then((response) => response.json())
       .then((json) => {
+        setIsLoading(false);
         if (json != "create success") {
           alert(json);
         } else {
-          navigation.navigate("SignInScreen");
+          Alert.alert(
+            "Success!",
+            "Login now",
+            [
+              {
+                text: "OK",
+                onPress: () => navigation.navigate("SignInScreen"),
+              },
+              {
+                text: "Cancel",
+                onPress: () => navigation.navigate("HomeScreen"),
+              },
+            ],
+            { cancelable: false }
+          );
         }
       })
       .catch((error) => {
@@ -90,102 +107,106 @@ export default function SignUpScreen({ navigation }) {
 
   return (
     <>
-      <KeyboardAvoidingView
-        behavior={Platform.Os == "ios" ? "padding" : "height"}
-        style={styles.container}
-      >
-        <ScrollView>
-          <Text style={styles.textfooter}>Username</Text>
-          <View style={styles.action}>
-            <Feather name="user" size={25} />
-            <TextInput
-              style={styles.inputs}
-              placeholder="Username..."
-              placeholderTextColor="#2c3e50"
-              value={username}
-              onChangeText={setUsername}
-            />
-          </View>
-          <Text style={styles.textfooter}>Email</Text>
-          <View style={styles.action}>
-            <MaterialCommunityIcons name="email-outline" size={25} />
-            <TextInput
-              keyboardType="email-address"
-              style={styles.inputs}
-              placeholder="Email..."
-              placeholderTextColor="#2c3e50"
-              value={email}
-              onChangeText={setEmail}
-            />
-          </View>
-          <Text style={styles.textfooter}>Phone</Text>
-          <View style={styles.action}>
-            <Feather name="phone" size={25} />
-            <TextInput
-              style={styles.inputs}
-              placeholder="Phone..."
-              placeholderTextColor="#2c3e50"
-              value={phone}
-              onChangeText={setPhone}
-            />
-          </View>
-          <Text style={styles.textfooter}>Address</Text>
-          <View style={styles.action}>
-            <Feather name="map" size={25} />
-            <TextInput
-              style={styles.inputs}
-              placeholder="Address..."
-              placeholderTextColor="#2c3e50"
-              value={address}
-              onChangeText={setAddress}
-            />
-          </View>
-          <Text style={styles.textfooter}>Password</Text>
-          <View style={styles.action}>
-            <Feather name="lock" size={25} />
-            <TextInput
-              style={styles.inputs}
-              placeholder="Password..."
-              placeholderTextColor="#2c3e50"
-              value={password}
-              onChangeText={setPassword}
-              secureTextEntry
-            />
-          </View>
-          <Text style={styles.textfooter}>Confirm password</Text>
-          <View style={styles.action}>
-            <Feather name="lock" size={25} />
-            <TextInput
-              style={styles.inputs}
-              placeholder="Confirm password..."
-              placeholderTextColor="#2c3e50"
-              value={validatePassword}
-              onChangeText={setValidatePassword}
-              secureTextEntry
-            />
-          </View>
-          <View
-            style={{
-              marginTop: 10,
-              justifyContent: "center",
-              alignItems: "center",
-            }}
-          >
-            <TouchableOpacity
-              style={styles.signUp}
-              onPress={() => {
-                if (formValidate) {
-                  signUp();
-                } else {
-                  Alert.alert("Alert", "Check information again");
-                }
+      {isLoading ? (
+        <Loading />
+      ) : (
+        <KeyboardAvoidingView
+          behavior={Platform.Os == "ios" ? "padding" : "height"}
+          style={styles.container}
+        >
+          <ScrollView>
+            <Text style={styles.textfooter}>Username</Text>
+            <View style={styles.action}>
+              <Feather name="user" size={25} />
+              <TextInput
+                style={styles.inputs}
+                placeholder="Username..."
+                placeholderTextColor="#2c3e50"
+                value={username}
+                onChangeText={setUsername}
+              />
+            </View>
+            <Text style={styles.textfooter}>Email</Text>
+            <View style={styles.action}>
+              <MaterialCommunityIcons name="email-outline" size={25} />
+              <TextInput
+                keyboardType="email-address"
+                style={styles.inputs}
+                placeholder="Email..."
+                placeholderTextColor="#2c3e50"
+                value={email}
+                onChangeText={setEmail}
+              />
+            </View>
+            <Text style={styles.textfooter}>Phone</Text>
+            <View style={styles.action}>
+              <Feather name="phone" size={25} />
+              <TextInput
+                style={styles.inputs}
+                placeholder="Phone..."
+                placeholderTextColor="#2c3e50"
+                value={phone}
+                onChangeText={setPhone}
+              />
+            </View>
+            <Text style={styles.textfooter}>Address</Text>
+            <View style={styles.action}>
+              <Feather name="map" size={25} />
+              <TextInput
+                style={styles.inputs}
+                placeholder="Address..."
+                placeholderTextColor="#2c3e50"
+                value={address}
+                onChangeText={setAddress}
+              />
+            </View>
+            <Text style={styles.textfooter}>Password</Text>
+            <View style={styles.action}>
+              <Feather name="lock" size={25} />
+              <TextInput
+                style={styles.inputs}
+                placeholder="Password..."
+                placeholderTextColor="#2c3e50"
+                value={password}
+                onChangeText={setPassword}
+                secureTextEntry
+              />
+            </View>
+            <Text style={styles.textfooter}>Confirm password</Text>
+            <View style={styles.action}>
+              <Feather name="lock" size={25} />
+              <TextInput
+                style={styles.inputs}
+                placeholder="Confirm password..."
+                placeholderTextColor="#2c3e50"
+                value={validatePassword}
+                onChangeText={setValidatePassword}
+                secureTextEntry
+              />
+            </View>
+            <View
+              style={{
+                marginTop: 10,
+                justifyContent: "center",
+                alignItems: "center",
               }}
             >
-              <Text style={styles.signUpText}>Sign Up</Text>
-            </TouchableOpacity>
-          </View>
-        </ScrollView>
-      </KeyboardAvoidingView>
+              <TouchableOpacity
+                style={styles.signUp}
+                onPress={() => {
+                  if (formValidate) {
+                    signUp();
+                  } else {
+                    Alert.alert("Alert", "Check information again");
+                  }
+                }}
+              >
+                <Text style={styles.signUpText}>Sign Up</Text>
+              </TouchableOpacity>
+            </View>
+          </ScrollView>
+        </KeyboardAvoidingView>
+      )}
     </>
   );
 }

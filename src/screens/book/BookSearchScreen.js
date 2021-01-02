@@ -5,16 +5,22 @@ import { Searchbar, Divider, Card } from "react-native-paper";
 
 //API
 import { SearchBooksAsync } from "../../services/BookService";
+//SCREEN
+import Loading from "../load/Loading";
 
 // CONSTANTS
 
 export default function BookSearchScreen({ navigation }) {
+  const [isLoading, setIsLoading] = useState(true);
   const [searchQuery, setSearchQuery] = React.useState("");
   const [bookSearchLists, setBookSearchLists] = useState([]);
   const [isSearch, setIsSearch] = useState(false);
 
   const _searchBook = async () => {
-    await SearchBooksAsync("").then((res) => setBookSearchLists(res));
+    await SearchBooksAsync("").then((res) => {
+      setBookSearchLists(res);
+      setIsLoading(false);
+    });
   };
   const searchCondition = () => {
     if (!isSearch) {
@@ -36,15 +42,21 @@ export default function BookSearchScreen({ navigation }) {
         onChangeText={onChangeSearch}
         value={searchQuery}
       />
-      <FlatList
-        showsVerticalScrollIndicator={false}
-        // tyle={styles.list}
-        // contentContainerStyle={}
-        horizontal={false}
-        numColumns={1}
-        data={bookSearchLists}
-        renderItem={({ item }) => <Item item={item} navigation={navigation} />}
-      />
+      {isLoading ? (
+        <>
+          <Loading />
+        </>
+      ) : (
+        <FlatList
+          showsVerticalScrollIndicator={false}
+          horizontal={false}
+          numColumns={1}
+          data={bookSearchLists}
+          renderItem={({ item }) => (
+            <Item item={item} navigation={navigation} />
+          )}
+        />
+      )}
     </>
   );
 }

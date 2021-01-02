@@ -29,7 +29,7 @@ export const ForgotPasswordAsync = async (email) => {
       }),
     }
   )
-    .then((response) => response.json())
+    .then((response) => response.status)
     .catch((error) => {
       console.log(error);
     });

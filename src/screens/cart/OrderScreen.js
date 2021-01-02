@@ -7,55 +7,35 @@ import {
   Image,
   TouchableOpacity,
 } from "react-native";
-import StepIndicator from "react-native-step-indicator";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import { ProgressSteps, ProgressStep } from "react-native-progress-steps";
 
 export default function OrderScreen({ navigation }) {
-  const [currentPosition, setCurrentPosition] = useState(0);
-  const labels = [
-    "Cart",
-    "Delivery Address",
-    "Order Summary",
-    "Payment Method",
-    "Track",
-  ];
-  const customStyles = {
-    stepIndicatorSize: 25,
-    currentStepIndicatorSize: 30,
-    separatorStrokeWidth: 2,
-    currentStepStrokeWidth: 3,
-    stepStrokeCurrentColor: "#fe7013",
-    stepStrokeWidth: 3,
-    stepStrokeFinishedColor: "#fe7013",
-    stepStrokeUnFinishedColor: "#aaaaaa",
-    separatorFinishedColor: "#fe7013",
-    separatorUnFinishedColor: "#aaaaaa",
-    stepIndicatorFinishedColor: "#fe7013",
-    stepIndicatorUnFinishedColor: "#ffffff",
-    stepIndicatorCurrentColor: "#ffffff",
-    stepIndicatorLabelFontSize: 13,
-    currentStepIndicatorLabelFontSize: 13,
-    stepIndicatorLabelCurrentColor: "#fe7013",
-    stepIndicatorLabelFinishedColor: "#ffffff",
-    stepIndicatorLabelUnFinishedColor: "#aaaaaa",
-    labelColor: "#999999",
-    labelSize: 13,
-    currentStepLabelColor: "#fe7013",
-  };
-  function onPageChange(position) {
-    setCurrentPosition(position);
-  }
   return (
-    <>
-      <StepIndicator
-        labels={labels}
-        currentPosition={currentPosition}
-        // customStyles={customStyles}
-        onPress={(number) => onPageChange(number)}
-      />
-    </>
+    <View style={{ flex: 1 }}>
+      <ProgressSteps>
+        <ProgressStep label="First Step">
+          <View style={{ alignItems: "center" }}>
+            <Text>This is the content within step 1!</Text>
+          </View>
+        </ProgressStep>
+        <ProgressStep label="Second Step">
+          <View style={{ alignItems: "center" }}>
+            <Text>This is the content within step 2!</Text>
+          </View>
+        </ProgressStep>
+        <ProgressStep label="Third Step">
+          <View style={{ alignItems: "center" }}>
+            <Text>This is the content within step 3!</Text>
+          </View>
+        </ProgressStep>
+      </ProgressSteps>
+    </View>
   );
 }
+
+const buttonTextStyle = {
+  color: "#393939",
+};
 
 const styles = StyleSheet.create({
   container: {

@@ -17,11 +17,15 @@ import {
   GoogleSocialButton,
 } from "react-native-social-buttons";
 
+import Loading from "../load/Loading";
+
 export default function SignInScreen({ navigation }) {
+  const [isLoading, setIsLoading] = React.useState(false);
   const signInContext = useContext(AppContext);
   const [username, setUsername] = React.useState("");
   const [password, setPassword] = React.useState("");
   function signIn() {
+    setIsLoading(true);
     fetch("https://utebookstore.herokuapp.com/user/login", {
       method: "POST",
       headers: {
@@ -36,11 +40,13 @@ export default function SignInScreen({ navigation }) {
       .then((response) => response.json())
       .then((json) => {
         if (json.msg != null) {
+          setIsLoading(false);
           alert(json.msg);
         } else {
           AsyncStorage.setItem("@username", json.username);
           AsyncStorage.setItem("@userToken", json.accessToken);
           signInContext.signIn();
+          setIsLoading(false);
           navigation.navigate("HomeScreen");
         }
 
@@ -50,69 +56,75 @@ export default function SignInScreen({ navigation }) {
 
   return (
     <>
-      <KeyboardAvoidingView
-        behavior={Platform.Os == "ios" ? "padding" : "height"}
-        style={styles.container}
-      >
-        <Text style={styles.textfooter}>Username</Text>
-        <View style={styles.action}>
-          <FAIcon name="user" size={25} />
-          <TextInput
-            style={styles.inputs}
-            placeholder="Username..."
-            value={username}
-            onChangeText={setUsername}
-          />
-        </View>
-        <Text style={[styles.textfooter, { marginTop: 20 }]}>Password</Text>
-        <View style={styles.action}>
-          <FAIcon name="lock" size={25} />
-          <TextInput
-            style={styles.inputs}
-            placeholder="Password..."
-            value={password}
-            onChangeText={setPassword}
-            secureTextEntry
-          />
-        </View>
-        <View style={styles.button}>
-          <TouchableOpacity style={styles.signIn} onPress={() => signIn()}>
-            <Text style={styles.loginText}>Sign In</Text>
-          </TouchableOpacity>
-        </View>
-        <TouchableOpacity
-          style={{ alignItems: "center", marginBottom: 20 }}
-          onPress={() => {
-            navigation.navigate("ForgotPassword");
-          }}
+      {isLoading ? (
+        <>
+          <Loading />
+        </>
+      ) : (
+        <KeyboardAvoidingView
+          behavior={Platform.Os == "ios" ? "padding" : "height"}
+          style={styles.container}
         >
-          <Text style={{ color: "#1a75ff", fontSize: 16 }}>
-            Forgot password?
-          </Text>
-        </TouchableOpacity>
-
-        <View style={styles.socialBtn}>
-          <FacebookSocialButton />
-          <GoogleSocialButton />
-        </View>
-        <View
-          style={{
-            alignItems: "center",
-            justifyContent: "center",
-            marginTop: 20,
-          }}
-        >
-          <Text
-            style={{ fontSize: 15 }}
+          <Text style={styles.textfooter}>Username</Text>
+          <View style={styles.action}>
+            <FAIcon name="user" size={25} />
+            <TextInput
+              style={styles.inputs}
+              placeholder="Username..."
+              value={username}
+              onChangeText={setUsername}
+            />
+          </View>
+          <Text style={[styles.textfooter, { marginTop: 20 }]}>Password</Text>
+          <View style={styles.action}>
+            <FAIcon name="lock" size={25} />
+            <TextInput
+              style={styles.inputs}
+              placeholder="Password..."
+              value={password}
+              onChangeText={setPassword}
+              secureTextEntry
+            />
+          </View>
+          <View style={styles.button}>
+            <TouchableOpacity style={styles.signIn} onPress={() => signIn()}>
+              <Text style={styles.loginText}>Sign In</Text>
+            </TouchableOpacity>
+          </View>
+          <TouchableOpacity
+            style={{ alignItems: "center", marginBottom: 20 }}
             onPress={() => {
-              navigation.navigate("SignUpScreen");
+              navigation.navigate("ForgotPassword");
             }}
           >
-            Create new account?
-            <Text style={{ color: "#1a75ff" }}> Sign up</Text>
-          </Text>
-        </View>
-      </KeyboardAvoidingView>
+            <Text style={{ color: "#1a75ff", fontSize: 16 }}>
+              Forgot password?
+            </Text>
+          </TouchableOpacity>
+
+          <View style={styles.socialBtn}>
+            <FacebookSocialButton />
+            <GoogleSocialButton />
+          </View>
+          <View
+            style={{
+              alignItems: "center",
+              justifyContent: "center",
+              marginTop: 20,
+            }}
+          >
+            <Text
+              style={{ fontSize: 15 }}
+              onPress={() => {
+                navigation.navigate("SignUpScreen");
+              }}
+            >
+              Create new account?
+              <Text style={{ color: "#1a75ff" }}> Sign up</Text>
+            </Text>
+          </View>
+        </KeyboardAvoidingView>
+      )}
     </>
   );
 }
