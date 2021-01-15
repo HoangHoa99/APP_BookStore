@@ -19,6 +19,8 @@ import {
 
 import Loading from "../load/Loading";
 
+import * as Google from "expo-google-app-auth";
+
 export default function SignInScreen({ navigation }) {
   const [isLoading, setIsLoading] = React.useState(false);
   const signInContext = useContext(AppContext);
@@ -45,7 +47,54 @@ export default function SignInScreen({ navigation }) {
         } else {
           AsyncStorage.setItem("@username", json.username);
           AsyncStorage.setItem("@userToken", json.accessToken);
-          signInContext.signIn();
+          signInContext.userSignIn();
+          setIsLoading(false);
+          navigation.navigate("HomeScreen");
+        }
+
+        return json;
+      });
+  }
+
+  //google
+  async function signInWithGoogleAsync() {
+    try {
+      const result = await Google.logInAsync({
+        androidClientId:
+          "46698234435-2cjnkk9oqnvslr8dshm71jcvahlogqia.apps.googleusercontent.com",
+        scopes: ["profile", "email"],
+      });
+
+      if (result.type === "success") {
+        return result;
+      } else {
+        return { cancelled: true };
+      }
+    } catch (e) {
+      return { error: true };
+    }
+  }
+
+  async function signInWithGoogle() {
+    setIsLoading(true);
+    let res = await signInWithGoogleAsync();
+    fetch("https://utebookstore.herokuapp.com/user/signingg", {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+      },
+      body: JSON.stringify({
+        token: res.idToken,
+      }),
+    })
+      .then((response) => response.json())
+      .then((json) => {
+        if (json.msd != null) {
+          alert(json.msd);
+        } else {
+          AsyncStorage.setItem("@username", json.username);
+          AsyncStorage.setItem("@userToken", json.accessToken);
+          signInContext.userSignIn();
           setIsLoading(false);
           navigation.navigate("HomeScreen");
         }
@@ -103,8 +152,8 @@ export default function SignInScreen({ navigation }) {
           </TouchableOpacity>
 
           <View style={styles.socialBtn}>
-            <FacebookSocialButton />
-            <GoogleSocialButton />
+            {/* <FacebookSocialButton /> */}
+            <GoogleSocialButton onPress={() => signInWithGoogle()} />
           </View>
           <View
             style={{

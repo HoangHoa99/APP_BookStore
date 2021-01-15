@@ -69,25 +69,25 @@ export default function CartScreen({ navigation }) {
   /** tinh total bill */
   function subtotalPrice() {
     return cartItems.reduce(
-      (sum, item) => sum + (item.checked == 1 ? item.qty * item.salePrice : 0),
+      (sum, item) => sum + (item.checked == 1 ? item.salePrice : 0),
       0
     );
   }
 
   /**tang giam so luong item */
-  function quantityHandler(action, index) {
-    const newItems = cartItems[index];
-    let currentQty = newItems.qty;
+  // function quantityHandler(action, index) {
+  //   const newItems = cartItems[index];
+  //   let currentQty = newItems.qty;
 
-    if (action == "more") {
-      newItems.qty = currentQty + 1;
-    } else if (action == "less") {
-      newItems.qty = currentQty > 1 ? currentQty - 1 : 1;
-    }
-    cartItems[index] = newItems;
-    AsyncStorage.setItem("@cartList", JSON.stringify(cartItems));
-    refresh();
-  }
+  //   if (action == "more") {
+  //     newItems.qty = currentQty + 1;
+  //   } else if (action == "less") {
+  //     newItems.qty = currentQty > 1 ? currentQty - 1 : 1;
+  //   }
+  //   cartItems[index] = newItems;
+  //   AsyncStorage.setItem("@cartList", JSON.stringify(cartItems));
+  //   refresh();
+  // }
 
   /** chon item vao bill */
   function selectHandler(index, value) {
@@ -287,10 +287,10 @@ export default function CartScreen({ navigation }) {
                       numberOfLines={1}
                       style={{ color: "#333333", marginBottom: 10 }}
                     >
-                      ${item.qty * item.salePrice}
+                      ${item.salePrice}
                     </Text>
                     <View style={{ flexDirection: "row" }}>
-                      <TouchableOpacity
+                      {/* <TouchableOpacity
                         onPress={() => quantityHandler("less", i)}
                         style={{ borderWidth: 1, borderColor: "#cccccc" }}
                       >
@@ -299,26 +299,26 @@ export default function CartScreen({ navigation }) {
                           size={22}
                           color="#cccccc"
                         />
-                      </TouchableOpacity>
+                      </TouchableOpacity> */}
                       <Text
                         style={{
-                          borderTopWidth: 1,
+                          // borderTopWidth: 1,
                           borderBottomWidth: 1,
                           borderColor: "#cccccc",
                           paddingHorizontal: 7,
                           paddingTop: 3,
-                          color: "#bbbbbb",
+                          color: "##000",
                           fontSize: 13,
                         }}
                       >
-                        {item.qty}
+                        Amount: {item.qty}
                       </Text>
-                      <TouchableOpacity
+                      {/* <TouchableOpacity
                         onPress={() => quantityHandler("more", i)}
                         style={{ borderWidth: 1, borderColor: "#cccccc" }}
                       >
                         <MaterialIcons name="add" size={22} color="#cccccc" />
-                      </TouchableOpacity>
+                      </TouchableOpacity> */}
                     </View>
                   </View>
                 </View>
@@ -378,7 +378,7 @@ export default function CartScreen({ navigation }) {
                   alignItems: "center",
                 }}
               >
-                <Text style={{ color: "#8f8f8f" }}>SubTotal: </Text>
+                <Text style={{ color: "#8f8f8f" }}>Total: </Text>
                 <Text>${subtotalPrice()}</Text>
               </View>
             </View>

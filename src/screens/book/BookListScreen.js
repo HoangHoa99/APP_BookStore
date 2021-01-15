@@ -10,9 +10,6 @@ import {
 import DropDownPicker from "react-native-dropdown-picker";
 //API
 import { GetBookAsync, BooksByCateAsync } from "../../services/BookService";
-// import Carousel from "react-native-snap-carousel";
-
-// import Product from "../../constants/Product";
 import { ScrollView } from "react-native-gesture-handler";
 
 // CONSTANTS
@@ -258,6 +255,7 @@ function Book({ item, navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: "#fff",
   },
   list: {
     paddingHorizontal: 1,

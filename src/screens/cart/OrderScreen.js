@@ -10,27 +10,7 @@ import {
 import { ProgressSteps, ProgressStep } from "react-native-progress-steps";
 
 export default function OrderScreen({ navigation }) {
-  return (
-    <View style={{ flex: 1 }}>
-      <ProgressSteps>
-        <ProgressStep label="First Step">
-          <View style={{ alignItems: "center" }}>
-            <Text>This is the content within step 1!</Text>
-          </View>
-        </ProgressStep>
-        <ProgressStep label="Second Step">
-          <View style={{ alignItems: "center" }}>
-            <Text>This is the content within step 2!</Text>
-          </View>
-        </ProgressStep>
-        <ProgressStep label="Third Step">
-          <View style={{ alignItems: "center" }}>
-            <Text>This is the content within step 3!</Text>
-          </View>
-        </ProgressStep>
-      </ProgressSteps>
-    </View>
-  );
+  return <View style={{ flex: 1 }}></View>;
 }
 
 const buttonTextStyle = {
@@ -42,6 +22,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     marginTop: 20,
+    backgroundColor: "#fff",
   },
   title: {
     fontSize: 22,

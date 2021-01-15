@@ -20,6 +20,7 @@ import SignInScreen from "./src/screens/user/SignInScreen";
 import SignUpScreen from "./src/screens/user/SignUpScreen";
 import BookSearchScreen from "./src/screens/book/BookSearchScreen";
 import MenuScreen from "./src/screens/user/MenuScreen";
+import EditProfileScreen from "./src/screens/user/EditProfileScreen";
 
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import ForgotPasswordScreen from "./src/screens/user/ForgotPasswordScreen";
@@ -45,7 +46,7 @@ export default function App() {
 
   getCartData();
 
-  const signIn = () => {
+  const userSignIn = () => {
     setIsLogin(true);
   };
 
@@ -61,7 +62,7 @@ export default function App() {
   const loginSetting = {
     isLogin: isLogin,
     setIsLogin,
-    signIn,
+    userSignIn,
     signOut,
     isAddToCart: isAddToCart,
     addItemToCart,
@@ -220,6 +221,14 @@ export default function App() {
             component={CheckoutScreen}
             options={() => ({
               title: "Checkout",
+              headerTitleAlign: "center",
+            })}
+          />
+          <Stack.Screen
+            name="EditProfileScreen"
+            component={EditProfileScreen}
+            options={({ navigation }) => ({
+              title: "Edit Profile",
               headerTitleAlign: "center",
             })}
           />

@@ -97,6 +97,7 @@ function Item({ item, navigation }) {
 const styles = StyleSheet.create({
   container: {
     paddingTop: 50,
+    backgroundColor: "#fff",
   },
   tinyLogo: {
     width: 40,
