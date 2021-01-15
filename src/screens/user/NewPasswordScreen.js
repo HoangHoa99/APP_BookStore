@@ -65,6 +65,7 @@ export default function NewPasswordScreen({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: "#fff",
   },
   inputText: {
     marginTop: 20,

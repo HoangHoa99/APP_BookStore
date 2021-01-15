@@ -152,7 +152,7 @@ export default function SignInScreen({ navigation }) {
           </TouchableOpacity>
 
           <View style={styles.socialBtn}>
-            <FacebookSocialButton />
+            {/* <FacebookSocialButton /> */}
             <GoogleSocialButton onPress={() => signInWithGoogle()} />
           </View>
           <View
