@@ -32,6 +32,7 @@ export default function EditProfileScreen({ navigation }) {
   const [image, setImage] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [profile, setProfile] = useState({});
+  const [token, setToken] = useState("");
 
   //edit
   const [id, setId] = useState("");
@@ -42,6 +43,7 @@ export default function EditProfileScreen({ navigation }) {
   useEffect(() => {
     async function _getUserProfile() {
       await AsyncStorage.getItem("@userToken").then((res) => {
+        setToken(res);
         let tokenDecode = jwt_decode(res);
         let user = tokenDecode.user;
         if (user.id != null) {
@@ -53,8 +55,9 @@ export default function EditProfileScreen({ navigation }) {
             setEditPhone(userInfo.phone);
             setEditAddress(userInfo.address);
           });
-          setIsLoading(false);
         }
+
+        setIsLoading(false);
       });
     }
     _getUserProfile();
@@ -87,10 +90,11 @@ export default function EditProfileScreen({ navigation }) {
 
   //---- edit user -----
   const editUserInfor = async () => {
+    setIsLoading(true);
     // Upload the image using the fetch and FormData APIs
     let formData = new FormData();
     // Assume "photo" is the name of the form field the server expects
-    formData.append("id", id);
+    // formData.append("id", id);
     formData.append("username", editName);
     formData.append("phone", editPhone);
     formData.append("address", editAddress);
@@ -103,13 +107,34 @@ export default function EditProfileScreen({ navigation }) {
       {
         method: "POST",
         headers: {
-          "content-type": "application/json",
+          "content-type": "multipart/form-data",
+          "x-access-token": token,
         },
-        body: JSON.stringify(formData),
+        body: formData,
       }
     )
       .then((res) => res.json())
-      .then((json) => console.log(json));
+      .then((json) => {
+        if (json === "update success") {
+          setIsLoading(false);
+          navigation.navigate("HomeScreen");
+        } else {
+          setIsLoading(false);
+          alert("Something wrong");
+        }
+      })
+      .catch((err) => console.log(err));
+    // .then((res) => res.status)
+    // .then((status) => {
+    //   if (status === 201) {
+    //     setIsLoading(false);
+    //     navigation.navigate("ProfileScreen");
+    //   } else {
+    //     setIsLoading(false);
+    //     console.log(status);
+    //     alert("Something Wrong");
+    //   }
+    // });
 
     return response;
   };

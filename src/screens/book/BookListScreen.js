@@ -11,6 +11,7 @@ import DropDownPicker from "react-native-dropdown-picker";
 //API
 import { GetBookAsync, BooksByCateAsync } from "../../services/BookService";
 import { ScrollView } from "react-native-gesture-handler";
+import Loading from "../load/Loading";
 
 // CONSTANTS
 
@@ -26,78 +27,45 @@ export default function BookListScreen({ navigation }) {
     const getBookLists = async () => {
       GetBookAsync().then((res) => {
         setNewBooks(res.newBook);
+        setIsLoading(false);
       });
     };
 
     getBookLists();
   }, []);
 
-  const _getBook = async () => {
-    await BooksByCateAsync(valueId).then((res) => {
-      res.data !== null ? setBooks(res.data) : setBooks([]);
-    });
-  };
+  React.useEffect(() => {
+    const _getBook = async () => {
+      await BooksByCateAsync(valueId).then((res) => {
+        res.data !== null ? setBooks(res.data) : setBooks([]);
+        // setIsLoading(false);
+      });
+    };
 
-  _getBook();
+    _getBook();
+  });
 
   return (
     <>
-      <ScrollView
-        style={{ flexDirection: "column" }}
-        showsVerticalScrollIndicator={false}
-      >
-        {/* new */}
-        <View
-          style={{
-            flexDirection: "row",
-            width: "100%",
-            alignItems: "center",
-            marginLeft: 15,
-            marginTop: 10,
-          }}
+      {isLoading ? (
+        <>
+          <Loading />
+        </>
+      ) : (
+        <ScrollView
+          style={{ flexDirection: "column" }}
+          showsVerticalScrollIndicator={false}
         >
-          <Text
-            style={{
-              fontFamily: "Bold",
-              fontWeight: "bold",
-              fontSize: 18,
-              color: "#4f4a4a",
-            }}
-          >
-            New Book
-          </Text>
+          {/* new */}
           <View
             style={{
-              width: 5,
-              height: 5,
-              borderRadius: 5,
-              marginHorizontal: 5,
-              backgroundColor: "#f11",
+              flexDirection: "row",
+              width: "100%",
+              alignItems: "center",
+              marginLeft: 15,
+              marginTop: 10,
             }}
-          ></View>
-        </View>
-        <FlatList
-          showsHorizontalScrollIndicator={false}
-          tyle={styles.list}
-          contentContainerStyle={styles.listContainer}
-          horizontal={true}
-          numColumns={1}
-          data={newBooks}
-          renderItem={({ item }) => (
-            <Book item={item} navigation={navigation} />
-          )}
-        />
-        {/* tieu su */}
-        <View
-          style={{
-            flexDirection: "row",
-            width: "100%",
-            alignItems: "center",
-            marginLeft: 15,
-            marginTop: 10,
-          }}
-        >
-          <View style={{ width: "30%", flexDirection: "row" }}>
+          >
             <Text
               style={{
                 fontFamily: "Bold",
@@ -106,61 +74,104 @@ export default function BookListScreen({ navigation }) {
                 color: "#4f4a4a",
               }}
             >
-              {title}
+              New Book
             </Text>
-          </View>
-          <View style={{ width: "20%" }}>
-            <DropDownPicker
-              items={[
-                {
-                  value: "5f789d047c17be338c676ef5",
-                  label: "Văn học",
-                },
-                {
-                  value: "5f789d147c17be338c676ef6",
-                  label: "Sách thiếu nhi",
-                },
-                {
-                  value: "5f789d1d7c17be338c676ef7",
-                  label: "Kinh tế",
-                },
-                {
-                  value: "5f789d427c17be338c676ef8",
-                  label: "Tiểu sử-hồi ký",
-                },
-                {
-                  value: "5f789d757c17be338c676ef9",
-                  label: "Tâm lý",
-                },
-                // {
-                //   value: "5f789d7d7c17be338c676efa",
-                //   label: "Ngoại ngữ",
-                // },
-              ]}
-              defaultValue={valueId}
-              containerStyle={{ marginLeft: 100, height: 30, width: 120 }}
-              style={{ backgroundColor: "#fafafa" }}
-              itemStyle={{ justifyContent: "flex-start" }}
-              dropDownStyle={{ backgroundColor: "#fafafa" }}
-              onChangeItem={(item) => {
-                setValueId(item.value);
-                setTitle(item.label);
+            <View
+              style={{
+                width: 5,
+                height: 5,
+                borderRadius: 5,
+                marginHorizontal: 5,
+                backgroundColor: "#f11",
               }}
-            />
+            ></View>
           </View>
-        </View>
-        <FlatList
-          showsHorizontalScrollIndicator={false}
-          tyle={styles.list}
-          contentContainerStyle={styles.listContainer}
-          horizontal={true}
-          numColumns={1}
-          data={books}
-          renderItem={({ item }) => (
-            <Book item={item} navigation={navigation} />
-          )}
-        />
-      </ScrollView>
+          <FlatList
+            showsHorizontalScrollIndicator={false}
+            tyle={styles.list}
+            contentContainerStyle={styles.listContainer}
+            horizontal={true}
+            numColumns={1}
+            data={newBooks}
+            renderItem={({ item }) => (
+              <Book item={item} navigation={navigation} />
+            )}
+          />
+          {/* tieu su */}
+          <View
+            style={{
+              flexDirection: "row",
+              width: "100%",
+              alignItems: "center",
+              marginLeft: 15,
+              marginTop: 10,
+            }}
+          >
+            <View style={{ width: "30%", flexDirection: "row" }}>
+              <Text
+                style={{
+                  fontFamily: "Bold",
+                  fontWeight: "bold",
+                  fontSize: 18,
+                  color: "#4f4a4a",
+                }}
+              >
+                {title}
+              </Text>
+            </View>
+            <View style={{ width: "20%" }}>
+              <DropDownPicker
+                items={[
+                  {
+                    value: "5f789d047c17be338c676ef5",
+                    label: "Văn học",
+                  },
+                  {
+                    value: "5f789d147c17be338c676ef6",
+                    label: "Sách thiếu nhi",
+                  },
+                  {
+                    value: "5f789d1d7c17be338c676ef7",
+                    label: "Kinh tế",
+                  },
+                  {
+                    value: "5f789d427c17be338c676ef8",
+                    label: "Tiểu sử-hồi ký",
+                  },
+                  {
+                    value: "5f789d757c17be338c676ef9",
+                    label: "Tâm lý",
+                  },
+                  // {
+                  //   value: "5f789d7d7c17be338c676efa",
+                  //   label: "Ngoại ngữ",
+                  // },
+                ]}
+                defaultValue={valueId}
+                containerStyle={{ marginLeft: 100, height: 30, width: 120 }}
+                style={{ backgroundColor: "#fafafa" }}
+                itemStyle={{ justifyContent: "flex-start" }}
+                dropDownStyle={{ backgroundColor: "#fafafa" }}
+                onChangeItem={(item) => {
+                  setValueId(item.value);
+                  setTitle(item.label);
+                }}
+              />
+            </View>
+          </View>
+          <FlatList
+            showsHorizontalScrollIndicator={false}
+            tyle={styles.list}
+            contentContainerStyle={styles.listContainer}
+            horizontal={true}
+            numColumns={1}
+            data={books}
+            renderItem={({ item }) => (
+              <Book item={item} navigation={navigation} />
+            )}
+          />
+        </ScrollView>
+      )}
     </>
   );
 }

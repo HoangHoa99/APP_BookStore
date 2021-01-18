@@ -32,6 +32,7 @@ export default function ProfileScreen({ navigation }) {
   useEffect(() => {
     async function _getUserProfile() {
       await AsyncStorage.getItem("@userToken").then((res) => {
+        // console.log(res);
         let tokenDecode = jwt_decode(res);
         let user = tokenDecode.user;
         if (user.id != null) {

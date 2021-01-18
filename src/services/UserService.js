@@ -36,3 +36,22 @@ export const ForgotPasswordAsync = async (email) => {
 
   return response;
 };
+
+export const UserOrderAsync = async (token) => {
+  const response = await fetch(
+    "https://utebookstore.herokuapp.com/order/myorder",
+    {
+      method: "GET",
+      headers: {
+        "content-type": "application/json",
+        "x-access-token": token,
+      },
+    }
+  )
+    .then((response) => response.json())
+    .catch((error) => {
+      console.log(error);
+    });
+
+  return response;
+};
