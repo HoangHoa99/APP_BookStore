@@ -30,7 +30,7 @@ export default function MenuScreen({ navigation }) {
         description="Follow your order"
         left={(props) => <List.Icon {...props} icon="truck" />}
         onPress={() => {
-          screenNavigate(true, "OrderScreen");
+          screenNavigate(checkIsLogin.isLogin, "OrderScreen");
         }}
       />
       <Divider />

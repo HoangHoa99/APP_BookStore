@@ -7,6 +7,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { FlatList, ScrollView } from "react-native-gesture-handler";
 
 export default function CheckoutScreen({ navigation }) {
+  const [isLoading, setIsLoading] = useState(false);
   const [profile, setProfile] = useState({});
   const [address, setAddress] = useState("");
   const [phone, setPhone] = useState("");
@@ -49,6 +50,7 @@ export default function CheckoutScreen({ navigation }) {
   }, []);
 
   async function checkoutOrder() {
+    setIsLoading(true);
     let productList = [];
     profile.cart.forEach((element) => {
       let value = {
@@ -91,6 +93,7 @@ export default function CheckoutScreen({ navigation }) {
         .then((status) => {
           console.log(status);
           if (status == 201) {
+            setIsLoading(false);
             Alert.alert(
               "Success",
               "Your order have been created",
@@ -103,6 +106,7 @@ export default function CheckoutScreen({ navigation }) {
               { cancelable: false }
             );
           } else {
+            setIsLoading(false);
             alert("Something went wrong");
           }
         });

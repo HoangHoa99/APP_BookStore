@@ -23,6 +23,7 @@ export default function OrderScreen({ navigation }) {
     async function _getUserOrder() {
       await AsyncStorage.getItem("@userToken").then((res) => {
         UserOrderAsync(res).then((userOrder) => {
+          // console.log(userOrder);
           setMyOrder(userOrder.data);
         });
         setIsLoading(false);
@@ -83,12 +84,20 @@ function Order({ item, navigation }) {
     }
   }
 
+  function getOrderCode(itemId) {
+    return itemId.slice(0, 5);
+  }
+
   return (
     <>
       <List.Item
-        title={<Text>Code: {item._id}</Text>}
+        title={<Text>Code: {getOrderCode(item._id)}</Text>}
         description={getStatus}
-        onPress={() => navigation.navigate("OrderDetailScreen")}
+        onPress={() =>
+          navigation.navigate("OrderDetailScreen", {
+            order: item,
+          })
+        }
         right={getIcon}
         // right={() => <List.Icon icon="delete" color="#f11" />}
       />
