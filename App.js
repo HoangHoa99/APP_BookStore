@@ -26,6 +26,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import ForgotPasswordScreen from "./src/screens/user/ForgotPasswordScreen";
 import NewPasswordScreen from "./src/screens/user/NewPasswordScreen";
 import CheckoutScreen from "./src/screens/cart/CheckoutScreen";
+import OrderDetailScreen from "./src/screens/cart/OrderDetailScreen";
 
 console.disableYellowBox = true;
 
@@ -229,6 +230,14 @@ export default function App() {
             component={EditProfileScreen}
             options={({ navigation }) => ({
               title: "Edit Profile",
+              headerTitleAlign: "center",
+            })}
+          />
+          <Stack.Screen
+            name="OrderDetailScreen"
+            component={OrderDetailScreen}
+            options={({ navigation }) => ({
+              title: "Order Detail",
               headerTitleAlign: "center",
             })}
           />
